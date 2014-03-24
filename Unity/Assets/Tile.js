@@ -12,7 +12,14 @@ class Tile extends MonoBehaviour {
 	private var markedForDeath = false;
 	private var deathTime : float;
 
-	function init(coordinate : Vector2) {		
+	private var board : Board;
+
+
+	function init(coordinate : Vector2, board : Board) {
+
+		this.board = board;
+		transform.parent = board.transform.parent;
+
 		// Choose a random value (2 or 4)
 		var rand = Random.Range(0.0, 1.0);
 		if (rand < 0.9) {
@@ -38,7 +45,7 @@ class Tile extends MonoBehaviour {
 
 	function UpdateDying() {
 		transform.localScale = Vector3.Lerp(transform.localScale, Vector3.zero, 0.05);
-		transform.position = Vector3.Lerp(transform.position, absorbingTile.transform.position, 0.02);
+		transform.localPosition = Vector3.Lerp(transform.localPosition, absorbingTile.transform.position, 0.02);
 
 		if (display_value > 0) {
 			display_value -= value/32.0;
@@ -49,7 +56,7 @@ class Tile extends MonoBehaviour {
 
 	function UpdateLiving() {
 		transform.localScale = Vector3.Lerp(transform.localScale, Vector3.one, 0.1);
-		transform.position = Vector3.Lerp(transform.position, desiredPosition, 0.1);
+		transform.localPosition = Vector3.Lerp(transform.localPosition, desiredPosition, 0.1);
 
 		if (display_value < value - .1) {
 			display_value += value/32.0;
@@ -65,7 +72,7 @@ class Tile extends MonoBehaviour {
 	function markForDeath(absorbingTile : Tile) {
 		markedForDeath = true;
 		this.absorbingTile = absorbingTile;
-		GameController.updateBoard(currentPosition, null);
+		board.updateBoard(currentPosition, null);
 		deathTime = Time.time;
 	}
 
@@ -81,10 +88,10 @@ class Tile extends MonoBehaviour {
 	}
 
 	function setPosition(coordinate : Vector2) {
-		if (GameController.board[currentPosition.x, currentPosition.y] == this) {
-			GameController.updateBoard(currentPosition, null);
+		if (board.board[currentPosition.x, currentPosition.y] == this) {
+			board.updateBoard(currentPosition, null);
 		}
-		GameController.updateBoard(coordinate, this);
+		board.updateBoard(coordinate, this);
 		desiredPosition = transformPosition(coordinate.x, coordinate.y);
 		currentPosition = coordinate;
 	}
