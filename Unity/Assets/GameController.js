@@ -155,8 +155,8 @@ class GameController extends MonoBehaviour {
 		for (var i = tiles.Count-1; i >= 1 ; i--) {
 
 			if (tiles[i] != null && tiles[i-1] != null && tiles[i].value == tiles[i-1].value) {
-				tiles[i].prepareToAbsorb(tiles[i-1]);
-				tiles[i-1].markForDeath();
+				tiles[i].setValue(tiles[i].value*2);
+				tiles[i-1].markForDeath(tiles[i]);
 				tiles[i-1] = null;
 				boardChanged = true;
 			}
@@ -167,7 +167,6 @@ class GameController extends MonoBehaviour {
 
 	private function handleBoardChange(direction : int) {
 		generateTile();
-		printBoard();
 	}
 
 	function printBoard(){

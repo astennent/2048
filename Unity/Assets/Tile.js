@@ -5,16 +5,14 @@ class Tile extends MonoBehaviour {
 	private var desiredPosition : Vector3;	
 	var currentPosition : Vector2;
 	var value : int;
+	var display_value : float;
 	var label : TextMesh;
 
-
-	var spawnTime : float;
-
-	private var tileToAbsorb : Tile = null;
+	private var absorbingTile : Tile = null;
 	private var markedForDeath = false;
+	private var deathTime : float;
 
-	function init(coordinate : Vector2) {
-		
+	function init(coordinate : Vector2) {		
 		// Choose a random value (2 or 4)
 		var rand = Random.Range(0.0, 1.0);
 		if (rand < 0.9) {
@@ -23,51 +21,55 @@ class Tile extends MonoBehaviour {
 			setValue(4);
 		}
 
-
 		// Set the coordinate and immediately jump to it.
 		setPosition(coordinate);
 		transform.position = desiredPosition;
-
-
-		spawnTime = Time.time;
 	}
 
 	function Update() {
 		if (markedForDeath) {
-			transform.localScale = Vector3.Lerp(transform.localScale, Vector3.zero, 0.05);
+			UpdateDying();
 		} else {
-			transform.localScale = Vector3.Lerp(transform.localScale, Vector3.one, 0.05);
+			UpdateLiving();
 		}
+		label.text = ""+parseInt(display_value);
+		renderer.material.color = TileColors.getColor(display_value);
+	}
 
+	function UpdateDying() {
+		transform.localScale = Vector3.Lerp(transform.localScale, Vector3.zero, 0.05);
+		transform.position = Vector3.Lerp(transform.position, absorbingTile.transform.position, 0.02);
+
+		if (display_value > 0) {
+			display_value -= value/32.0;
+		} else if (Time.time - deathTime > .7) {
+			explode();
+		} 
+	}
+
+	function UpdateLiving() {
+		transform.localScale = Vector3.Lerp(transform.localScale, Vector3.one, 0.1);
 		transform.position = Vector3.Lerp(transform.position, desiredPosition, 0.1);
-		if (tileToAbsorb != null && Vector3.Distance(transform.position, desiredPosition) < 0.2) {
-			absorbTarget();
+
+		if (display_value < value - .1) {
+			display_value += value/32.0;
+		} else {
+			display_value = value;
 		}
- 
 	}
 
-	private function setValue(value : int) {
+	function setValue(value : int) {
 		this.value = value;
-		label.text = ""+value;
 	}
 
-
-	function prepareToAbsorb(doomedTile : Tile) {
-		tileToAbsorb = doomedTile;
-	}
-
-	private function absorbTarget() {
-		setValue(value * 2);
-		tileToAbsorb.getAbsorbed();
-		tileToAbsorb = null;
-	}
-
-	function markForDeath() {
+	function markForDeath(absorbingTile : Tile) {
 		markedForDeath = true;
+		this.absorbingTile = absorbingTile;
 		GameController.updateBoard(currentPosition, null);
+		deathTime = Time.time;
 	}
 
-	function getAbsorbed() {
+	function explode() {
 		Destroy(gameObject);
 	}
 
