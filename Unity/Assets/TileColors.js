@@ -17,10 +17,11 @@ static var colors = [
 
 static function getColor(value : float) {
 	if (value < 0) value = 0;
+	
 	var index = Mathf.Log(value, 2);
 	index = Mathf.Clamp(index, 0, colors.length-1);
-
 	var transitionProgress = index - parseInt(index);
+
 	return getTransitionColor(index, transitionProgress);
 
 }

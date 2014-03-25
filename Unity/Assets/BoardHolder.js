@@ -8,25 +8,26 @@ private var rightRotation : Quaternion;
 private var desiredRotation : Quaternion;
 
 private var nudgeTime : float;
+private var nudgeDistance : float = 7;
 
 function Start() {
 	defaultRotation = transform.rotation;
 
-	transform.RotateAround(transform.position, Vector3.right, 5);
+	transform.RotateAround(transform.position, Vector3.right, nudgeDistance);
 	upRotation = transform.rotation;
 
-	transform.RotateAround(transform.position, Vector3.right, -10);
+	transform.RotateAround(transform.position, Vector3.right, -2 * nudgeDistance);
 	downRotation = transform.rotation;
 
-	transform.RotateAround(transform.position, Vector3.right, 5);
+	transform.RotateAround(transform.position, Vector3.right, nudgeDistance);
 
-	transform.RotateAround(transform.position, Vector3.up, 5);
+	transform.RotateAround(transform.position, Vector3.up, nudgeDistance);
 	leftRotation = transform.rotation;
 
-	transform.RotateAround(transform.position, Vector3.up, -10);
+	transform.RotateAround(transform.position, Vector3.up, -2 * nudgeDistance);
 	rightRotation = transform.rotation;
 
-	transform.RotateAround(transform.position, Vector3.up, 5);
+	transform.RotateAround(transform.position, Vector3.up, nudgeDistance);
 
 	desiredRotation = defaultRotation;
 }

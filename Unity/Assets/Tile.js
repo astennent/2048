@@ -30,7 +30,7 @@ class Tile extends MonoBehaviour {
 
 		// Set the coordinate and immediately jump to it.
 		setPosition(coordinate);
-		transform.position = desiredPosition;
+		transform.localPosition = desiredPosition;
 	}
 
 	function Update() {
@@ -44,9 +44,10 @@ class Tile extends MonoBehaviour {
 	}
 
 	function UpdateDying() {
-		transform.localScale = Vector3.Lerp(transform.localScale, Vector3.zero, 0.05);
-		transform.localPosition = Vector3.Lerp(transform.localPosition, absorbingTile.transform.position, 0.02);
-
+		transform.localPosition = Vector3.Lerp(transform.localPosition, absorbingTile.transform.localPosition, 0.2);
+		if (Vector3.Distance(transform.localPosition, absorbingTile.transform.localPosition) < .5) {
+			transform.localScale = Vector3.Lerp(transform.localScale, Vector3.zero, 0.1);
+		}
 		if (display_value > 0) {
 			display_value -= value/32.0;
 		} else if (Time.time - deathTime > .7) {
