@@ -7,6 +7,7 @@ class Board extends MonoBehaviour {
 	var boardHolder : BoardHolder;
 
 	private var boardChanged = false;
+	private var mergedPointTotal : int;
 
 	static var NONE = -1;
 	static var UP = 0;
@@ -59,6 +60,8 @@ class Board extends MonoBehaviour {
 		var primaryAxisCount = board.GetLength(0);
 		var secondaryAxisCount = board.GetLength(1);
 
+		mergedPointTotal = 0;
+
 		for (var i = 0 ; i < primaryAxisCount ; i++) {
 			var tempTiles = new List.<Tile>();
 			for (var j = 0 ; j < secondaryAxisCount ; j++) {
@@ -81,6 +84,10 @@ class Board extends MonoBehaviour {
 
 			
 			shiftAndMergeRow(tempTiles, direction);
+		}
+
+		if (mergedPointTotal != 0) {
+			ScoreController.instance.generateScoreBonus(mergedPointTotal);
 		}
 
 		if (boardChanged) {
@@ -157,10 +164,12 @@ class Board extends MonoBehaviour {
 			if (tiles[i] != null && tiles[i-1] != null && tiles[i].matches(tiles[i-1])) {
 				
 				//Record the change in score
-				ScoreController.addPoints(tiles[i].value*2);
+				var pointValue = tiles[i].value*2;
+				ScoreController.addPoints(pointValue);
+				mergedPointTotal += pointValue;
 				
 				//Notify the tiles of the changes
-				tiles[i].setValue(tiles[i].value*2);
+				tiles[i].setValue(pointValue);
 				tiles[i].markForExpansion();
 				tiles[i-1].markForDeath(tiles[i]);
 				
@@ -170,6 +179,7 @@ class Board extends MonoBehaviour {
 			}
 
 		}
+
 		return tiles;
 	}
 
