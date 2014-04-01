@@ -1,17 +1,17 @@
 ﻿#pragma strict
 
 static var colors = [
-	new Color(.8, .8, 1),
-	new Color(.5, .8, 1),	//2
-	new Color(.2, .4, .9),	//4
-	new Color(.3, .7, .6),	//8
-	new Color(.7, 1, .4),	//16
-	new Color(1, 1, 0),	//32
-	new Color(1, .7, .3),	//64
-	new Color(.8, .3, .2),	//128
-	new Color(.7, .2, .8),	//256
-	new Color(.4, .3, .7),	//512
-	new Color(.2, .2, .2), 	//1024
+	new Color(.63, .69, .37),
+	new Color(.57, .61, .32),	//2
+	new Color(.68, .68, .85),	//4
+	new Color(.75, .81, .27),	//8
+	new Color(.41, .73, .36),	//16
+	new Color(.73, .31, .36),	//32
+	new Color(.65, .39, .62),	//64
+	new Color(.37, .39, .63),	//128
+	new Color(.53, .74, .81),	//256
+	new Color(.31, .47, .90),	//512
+	new Color(.61, .62, .90), 	//1024
 	new Color(1, 1, 1) 	//2048
 ];
 

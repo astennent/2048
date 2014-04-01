@@ -24,6 +24,10 @@ class Tile extends BaseTile {
 			setValue(4);
 		}
 
+		//Randomly adjust the texture
+		var offset = new Vector2(Random.Range(0,1.0),Random.Range(0, 0.8));
+		renderer.material.SetTextureOffset ("_MainTex", offset);
+
 		// Set the coordinate and immediately jump to it.
 		setPosition(coordinate);
 		transform.localPosition = desiredPosition;

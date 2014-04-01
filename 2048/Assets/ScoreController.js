@@ -26,7 +26,10 @@ class ScoreController extends MonoBehaviour {
 		}
 		scoreLabel.text = ""+displayScore;
 
-		scoreLabel.color = getScoreColor(displayScore);
+		var progressColor = getScoreColor(displayScore);
+		scoreLabel.color = progressColor;
+		RenderSettings.skybox.SetColor("_TintColor", progressColor);
+
 	}
 
 	static function Initialize() {
