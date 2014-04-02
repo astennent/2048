@@ -2,6 +2,7 @@
 
 static var deltaPosition = Vector2.zero;
 static var inputFrozen = false;
+static var lastInputTime = 0.0;
 
 static function getInputDirection() {
 	if(Input.GetKeyDown(KeyCode.UpArrow)) {
@@ -18,12 +19,9 @@ static function getInputDirection() {
 	}
 
 
-	if (Input.touchCount > 0)  {
+	if (Input.touchCount > 0 && Time.time - lastInputTime > 0.5)  {
 
 		var touch = Input.GetTouch(0);
-		if (inputFrozen || touch.deltaPosition.sqrMagnitude < .01) {
-			deltaPosition = Vector2.zero;
-		}
 
 		deltaPosition += touch.deltaPosition;
  		if (deltaPosition.sqrMagnitude > 120) {
@@ -41,17 +39,26 @@ static function getInputDirection() {
  					direction = Board.DOWN;
  				}
  			}
- 			inputFrozen = true;
+ 			freezeInput();
  			deltaPosition = Vector2.zero;
  			return direction;
  		}
 		
 
 	} else {
-		inputFrozen = false;
-		deltaPosition = Vector2.zero;
+		unfreezeInput();
 	}
 
 
 	return Board.NONE;
+}
+
+static function freezeInput() {
+	inputFrozen = true;
+}
+
+static function unfreezeInput() {
+	inputFrozen = false;
+	deltaPosition = Vector2.zero;
+
 }

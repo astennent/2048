@@ -10,6 +10,8 @@ private var desiredRotation : Quaternion;
 private var nudgeTime : float;
 private var nudgeDistance : float = 6;
 
+private var islandActive : boolean = false;
+
 function Start() {
 	defaultRotation = transform.rotation;
 
@@ -59,4 +61,12 @@ function nudge(direction : int) {
 		default: break;
 
 	}
+}
+
+function isActive() {
+	return islandActive;
+}
+
+function setActive(islandActive : boolean) {
+	this.islandActive = islandActive;
 }

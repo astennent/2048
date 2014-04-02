@@ -4,7 +4,7 @@ class Board extends MonoBehaviour {
 	
 	var board : Tile[,];
 	var tilePrefab : Tile;
-	var boardHolder : BoardHolder;
+	var island : Island;
 
 	private var boardChanged = false;
 	private var mergedPointTotal : int;
@@ -18,8 +18,10 @@ class Board extends MonoBehaviour {
 	private var boardWon = false;
 	private var boardLost = false;
 
+	var boardSize : int = 4;
+
 	function Start () {
-		board = new Tile[4, 4];
+		board = new Tile[boardSize, boardSize];
 		generateTile();
 		generateTile();
 		GameController.registerBoard(this);
@@ -55,26 +57,27 @@ class Board extends MonoBehaviour {
 
 	function onMove(direction : int) {
 
-		boardHolder.nudge(direction);
+		if (!island.isActive()) {
+			return;
+		}
 
-		var primaryAxisCount = board.GetLength(0);
-		var secondaryAxisCount = board.GetLength(1);
+		island.nudge(direction);
 
 		mergedPointTotal = 0;
 
-		for (var i = 0 ; i < primaryAxisCount ; i++) {
+		for (var i = 0 ; i < boardSize ; i++) {
 			var tempTiles = new List.<Tile>();
-			for (var j = 0 ; j < secondaryAxisCount ; j++) {
+			for (var j = 0 ; j < boardSize ; j++) {
 
 				switch(direction) {
 					case UP:
 						tempTiles.Add(board[i, j]);
 						break;
 					case DOWN:
-						tempTiles.Add(board[i, secondaryAxisCount-j-1]);
+						tempTiles.Add(board[i, boardSize-j-1]);
 						break;
 					case LEFT:
-						tempTiles.Add(board[secondaryAxisCount-j-1,i]);
+						tempTiles.Add(board[boardSize-j-1,i]);
 						break;
 					case RIGHT:
 						tempTiles.Add(board[j,i]);
@@ -115,10 +118,10 @@ class Board extends MonoBehaviour {
 						tiles[i].setY(i);
 						break;
 					case DOWN:
-						tiles[i].setY( board.GetLength(0)-i-1);
+						tiles[i].setY( boardSize-i-1);
 						break;
 					case LEFT:
-						tiles[i].setX( board.GetLength(1)-i-1);
+						tiles[i].setX( boardSize-i-1);
 						break;
 					case RIGHT:
 						tiles[i].setX(i);
@@ -195,8 +198,8 @@ class Board extends MonoBehaviour {
 	}
 
 	private function checkForWin() {
-		for (var i = 0 ; i < board.GetLength(0) ; i++) {
-			for (var j = 0 ; j < board.GetLength(1) ; j++) {
+		for (var i = 0 ; i < boardSize ; i++) {
+			for (var j = 0 ; j < boardSize ; j++) {
 				if (board[i,j] != null && board[i,j].value == 2048) {
 					return true;
 				}
