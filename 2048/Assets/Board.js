@@ -84,7 +84,7 @@ class Board extends MonoBehaviour {
 		}
 
 		if (mergedPointTotal != 0) {
-			ScoreController.instance.generateScoreBonus(mergedPointTotal);
+			ScoreController.generateScoreBonus(mergedPointTotal);
 		}
 
 		if (boardChanged) {

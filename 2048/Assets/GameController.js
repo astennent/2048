@@ -14,7 +14,7 @@ class GameController extends MonoBehaviour {
 	}
 
 	function Start() {
-		ScoreController.Initialize();
+		setIsland(null);
 	}
 
 	function Update() {
@@ -29,11 +29,16 @@ class GameController extends MonoBehaviour {
 	}
 
 	function playClassic() {
-		activeIsland = classicIsland;
+		setIsland(classicIsland);
 	}
 
 	function playFours() {
-		activeIsland = foursIsland;
+		setIsland(foursIsland);
+	}
+
+	function setIsland(island : Island) {
+		activeIsland = island;
+		ScoreController.invalidate();
 	}
 
 	function onMove(direction : int) {

@@ -6,17 +6,14 @@ class ScoreBonus extends MonoBehaviour {
 	var numPoints : int;
 	var startTime : float;
 
-	function Start () {
-	}
-
 	function init(numPoints : int) {
 		startTime = Time.time;
 		this.numPoints = numPoints;
 
-		var numSpaces = (ScoreController.currentScore+"").length;
+		var numSpaces = (ScoreController.getCurrentScore()+"").length;
 		transform.localPosition.x += .23 * numSpaces;
 		GetComponent(TextMesh).text = "+"+numPoints;
-		GetComponent(TextMesh).color = ScoreController.getScoreColor(numPoints);
+		GetComponent(TextMesh).color = TileColors.getColor(numPoints);
 	}	
 
 	function Update () {
@@ -26,7 +23,6 @@ class ScoreBonus extends MonoBehaviour {
 		if (Time.time - startTime > 1) {
 			Destroy(gameObject);
 		}
-
 	}
 
 }
