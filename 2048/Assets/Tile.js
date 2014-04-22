@@ -1,6 +1,6 @@
 ﻿#pragma strict
 
-class Tile extends BaseTile {
+class Tile extends MonoBehaviour {
 
 	private var currentPosition : Vector2;
 
@@ -10,6 +10,12 @@ class Tile extends BaseTile {
 	private var expandTime : float = -1;
 
 	private var board : Board;
+
+	private var desiredPosition : Vector3;	
+
+	var value : int;
+	var display_value : float;
+	var label : TextMesh;
 
 	function init(coordinate : Vector2, board : Board) {
 		this.board = board;
@@ -34,7 +40,15 @@ class Tile extends BaseTile {
 	}
 
 	function Update() {
-		super.Update();
+		
+		if (display_value > 0) {
+			label.text = ""+parseInt(display_value);
+		} else {
+			label.text = "";
+		}
+		renderer.material.color = TileColors.getColor(display_value);
+
+
 		if (markedForDeath) {
 			UpdateDying();
 		} else {
@@ -74,6 +88,10 @@ class Tile extends BaseTile {
 		}
 	}
 
+	function setValue(value : int) {
+		this.value = value;
+	}
+
 	function markForDeath(absorbingTile : Tile) {
 		markedForDeath = true;
 		this.absorbingTile = absorbingTile;
@@ -106,8 +124,14 @@ class Tile extends BaseTile {
 	}
 
 	private function transformPosition(x : int, y : int) {
-		var x_coordinate = 1.2*x - 1.8;
-		var y_coordinate = 1.2*y - 1.8;
+		// var x_coordinate = 1.2*x - 1.8;
+		// var y_coordinate = 1.2*y - 1.8;
+
+		var x_coordinate = board.transform.localPosition.x + 1.2*x -(.075*board.boardSize+.15)*board.boardSize;
+		var y_coordinate = board.transform.localPosition.y + 1.2*y -(.075*board.boardSize+.15)*board.boardSize;
+
+		// var x_coordinate = board.transform.localPosition.x + (0.3*x - 0.45)*board.boardSize;
+		// var y_coordinate = board.transform.localPosition.y + (0.3*y - 0.45)*board.boardSize;
 		return new Vector3(x_coordinate, y_coordinate, 0);
 	}
 

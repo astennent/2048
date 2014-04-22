@@ -57,12 +57,6 @@ class Board extends MonoBehaviour {
 
 	function onMove(direction : int) {
 
-		if (!island.isActive()) {
-			return;
-		}
-
-		island.nudge(direction);
-
 		mergedPointTotal = 0;
 
 		for (var i = 0 ; i < boardSize ; i++) {

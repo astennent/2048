@@ -1,42 +1,37 @@
-﻿var animatedButtonPrefab : AnimatedButton;
+﻿class MainMenu extends MonoBehaviour {
 
-class MainMenu extends MonoBehaviour {
-	
-	protected var buttonNames : List.<String>;
-	protected var buttonFunctions : List.<Function>;
-	protected var buttons : List.<AnimatedButton>;
+	private var gameController : GameController;
 
 	function Start() {
-		buttonNames = new List.<String>();
-		buttonNames.Add("Play");
-		buttonNames.Add("Medals");
-		buttonNames.Add("Exit");
-
-		buttonFunctions.Add(GameController.Play);
-		buttonFunctions.Add(GameController.DisplayMedals);
-		buttonFunctions.Add(GameController.Exit);
+		gameController = GetComponent(GameController);
 	}
-
-	function Show() {
-		buttons = new List.<AnimatedButton>();
-		for (var i = 0 ; i < buttonNames.Count ; i++) {
-			var extraSpace : float = 40;
-			var x = Screen.width/2.0;
-			var y = (Screen.height-extraSpace) / buttonNames.Count * i + extraSpace;
-			var z = 5;
-			var location : Vector3 = Camera.main.ScreenToWorldPoint(new Vector3(x, y, z));
-			var button = GameObject.Instantiate(animatedButtonPrefab, location, transform.rotation);
-			button.init(buttonNames[i], buttonFunctions[i]);
-			buttons.Add(button);
+	
+	function OnGUI() {
+		if (GameController.activeIsland != null) {
+			return;
 		}
-	}
 
-	function Hide() {
-		for (var button in buttons) {
-			button.disperse();
+		var width = Screen.width*3.0/4.0;
+		var height = Screen.height*1.0/8.0;
+		var verticalPadding = Screen.height*1.2/8.0;
+		var y = Screen.height*1.0/3.0;
+		var x = Screen.width*1.0/8.0;
+
+		var buttonRect = new Rect(x, y, width, height);
+		if (GUI.Button(buttonRect, "Classic")) {
+			gameController.playClassic();
 		}
-		buttons.Clear();
-	}
 
+		buttonRect.y += verticalPadding;
+		if (GUI.Button(buttonRect, "Fours")) {
+			gameController.playFours();
+		}
+
+		buttonRect.y += verticalPadding;
+		if (GUI.Button(buttonRect, "Other Game")) {
+
+		}
+
+	}
 
 }
