@@ -18,13 +18,35 @@ class Board extends MonoBehaviour {
 	private var boardWon = false;
 	private var boardLost = false;
 
+	var canReset = true;
+	private var maxTurnsToReset = 5;
+	private var turnsToReset = 0;
+
 	var boardSize : int = 4;
+
+	private var spawnTileValue : int = 2;
 
 	function Start () {
 		board = new Tile[boardSize, boardSize];
 		generateTile();
 		generateTile();
-		GameController.registerBoard(this);
+		island.registerBoard(this);
+	}
+
+	function resetTiles() {
+		//Destroy all tiles.
+		for (var x = 0 ; x < board.GetLength(0) ; x++) {
+			for (var y = 0 ; y < board.GetLength(1) ; y++) {
+				if (board[x,y] != null) {
+					board[x,y].markForReset();
+				}
+			}
+		}
+
+		//Create a new board
+		board = new Tile[boardSize, boardSize];
+		generateTile();
+		generateTile();
 	}
 
 	function isWon() {
@@ -55,6 +77,7 @@ class Board extends MonoBehaviour {
 		board[coordinate.x, coordinate.y] = tile;
 	}
 
+	// Returns true if tiles were moved.
 	function onMove(direction : int) {
 
 		mergedPointTotal = 0;
@@ -90,7 +113,10 @@ class Board extends MonoBehaviour {
 		if (boardChanged) {
 			handleBoardChange(direction);
 		}
+
+		var output = boardChanged;
 		boardChanged = false;
+		return output;
 	}
 
 	function shiftAndMergeRow(tiles : List.<Tile>, direction : int) {
@@ -189,6 +215,9 @@ class Board extends MonoBehaviour {
 	function UpdateBoardStatus() {
 		boardWon = checkForWin();
 		boardLost = checkForLoss();
+		if (boardLost) {
+			handleBoardLost();
+		}
 	}
 
 	private function checkForWin() {
@@ -224,8 +253,39 @@ class Board extends MonoBehaviour {
 				}
 			}
 		}
-		print("Game Over");
+
+		turnsToReset = maxTurnsToReset;
 		return true;
 	}
-	
+
+	function handleBoardLost() {
+		//Turn everything to metal.
+		for (var x = 0 ; x < board.GetLength(0) ; x++) {
+			for (var y = 0 ; y < board.GetLength(1) ; y++) {
+				if (board[x,y] != null) {
+					board[x,y].markFrozen();
+				}
+			}
+		}
+	}
+
+	//Reduces the number of turns remaining before the board can ressurect by 1.
+	function decrementResetCounter() {
+		if (canReset && turnsToReset > 0) {
+			turnsToReset-=1;
+			if (turnsToReset == 0) {
+				ressurect();
+			}
+		} 
+	}
+
+	function ressurect() {
+		spawnTileValue++;
+		resetTiles();
+	}
+
+	function getSpawnTileValue() {
+		return spawnTileValue;
+	}
+
 }

@@ -6,7 +6,9 @@ class Tile extends MonoBehaviour {
 
 	private var absorbingTile : Tile = null;
 	private var markedForDeath = false;
+	private var markedFrozen = false;
 	private var deathTime : float;
+	private var frozenTime : float;
 	private var expandTime : float = -1;
 
 	private var board : Board;
@@ -17,6 +19,8 @@ class Tile extends MonoBehaviour {
 	var display_value : float;
 	var label : TextMesh;
 
+	var frozenMat : Material;
+
 	function init(coordinate : Vector2, board : Board) {
 		this.board = board;
 		transform.parent = board.transform.parent;
@@ -24,10 +28,12 @@ class Tile extends MonoBehaviour {
 
 		// Choose a random value (2 or 4)
 		var rand = Random.Range(0.0, 1.0);
+		var lowValue = board.getSpawnTileValue();
+		var highValue = lowValue*2;
 		if (rand < 0.9) {
-			setValue(2);
+			setValue(lowValue);
 		} else {
-			setValue(4);
+			setValue(highValue);
 		}
 
 		//Randomly adjust the texture
@@ -46,8 +52,10 @@ class Tile extends MonoBehaviour {
 		} else {
 			label.text = "";
 		}
-		renderer.material.color = TileColors.getColor(display_value);
 
+		if (!markedFrozen) {
+			renderer.material.color = TileColors.getColor(display_value);
+		}
 
 		if (markedForDeath) {
 			UpdateDying();
@@ -57,8 +65,10 @@ class Tile extends MonoBehaviour {
 	}
 
 	private function UpdateDying() {
-		transform.localPosition = Vector3.Lerp(transform.localPosition, absorbingTile.transform.localPosition, 0.2);
-		if (Vector3.Distance(transform.localPosition, absorbingTile.transform.localPosition) < .5) {
+		if (absorbingTile != null) {
+			transform.localPosition = Vector3.Lerp(transform.localPosition, absorbingTile.transform.localPosition, 0.2);
+		} 
+		if (absorbingTile == null || Vector3.Distance(transform.localPosition, absorbingTile.transform.localPosition) < .5) {
 			transform.localScale = Vector3.Lerp(transform.localScale, Vector3.zero, 0.1);
 		}
 
@@ -73,12 +83,13 @@ class Tile extends MonoBehaviour {
 		transform.localPosition = Vector3.Lerp(transform.localPosition, desiredPosition, 0.1);
 		
 		if (Time.time - expandTime < .25) {
-			var desiredScale = 1.2;
+			var desiredScale = (markedFrozen) ? 1.3 : 1.2;
 			var scalingSpeed = .3;
 		} else {
 			desiredScale = 1.0;
 			scalingSpeed = .1;
 		}
+
 		transform.localScale = Vector3.Lerp(transform.localScale, desiredScale*Vector3.one, scalingSpeed);
 
 		if (display_value < value - .1) {
@@ -92,11 +103,22 @@ class Tile extends MonoBehaviour {
 		this.value = value;
 	}
 
+	function markForReset() {
+		markedForDeath = true;
+		deathTime = Time.time;
+	}
+
 	function markForDeath(absorbingTile : Tile) {
 		markedForDeath = true;
 		this.absorbingTile = absorbingTile;
 		board.updateBoard(currentPosition, null);
 		deathTime = Time.time;
+	}
+
+	function markFrozen() {
+		markedFrozen = true;
+		renderer.material = frozenMat;
+		expandTime = Time.time;
 	}
 
 	function markForExpansion() {

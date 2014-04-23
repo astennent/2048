@@ -2,16 +2,11 @@
 import System.Collections.Generic;
 
 class GameController extends MonoBehaviour {
-	static var boards = new List.<Board>();
 	static var activeIsland : Island;
 
 	var classicIsland : Island;
 	var foursIsland : Island;
 	var gameCamera : GameCamera;
-
-	static function registerBoard(board : Board) {
-		boards.Add(board);
-	}
 
 	function Start() {
 		setIsland(null);
@@ -20,12 +15,7 @@ class GameController extends MonoBehaviour {
 	function Update() {
 		var direction = InputController.getInputDirection();
 		gameCamera.nudge(direction);
-
-		for (var board in boards) {
-			if (activeIsland == board.island) {
-				board.onMove(direction);
-			}
-		}
+		onMove(direction);
 	}
 
 	function playClassic() {
@@ -38,11 +28,16 @@ class GameController extends MonoBehaviour {
 
 	function setIsland(island : Island) {
 		activeIsland = island;
+		if (island != null) {
+			activeIsland.resetTiles();
+		}
 		ScoreController.invalidate();
 	}
 
 	function onMove(direction : int) {
-
+		if (activeIsland != null) { 
+			activeIsland.onMove(direction);
+		}
 	}
 
 	static function Exit() {

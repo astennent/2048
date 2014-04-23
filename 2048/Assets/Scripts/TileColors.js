@@ -3,7 +3,7 @@
 static var colors = [
 	new Color(.63, .69, .37),
 	new Color(.57, .61, .32),	//2
-	new Color(.68, .68, .85),	//4
+	new Color(.32, .68, .85),	//4
 	new Color(.75, .81, .27),	//8
 	new Color(.41, .73, .36),	//16
 	new Color(.73, .31, .36),	//32

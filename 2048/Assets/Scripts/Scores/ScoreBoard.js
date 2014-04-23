@@ -15,6 +15,12 @@ class ScoreBoard extends MonoBehaviour {
 	}
 
 	function Update() {
+
+		//Disable all 3d labels associated with the board if it's not the active island.
+		for (var child : Transform  in transform) {
+			child.renderer.enabled = (GameController.activeIsland == island);
+		}
+
 		if (displayScore < currentScore-20) {
 			displayScore = Mathf.Lerp(displayScore, currentScore, 0.1);
 		} else if (displayScore < currentScore) {

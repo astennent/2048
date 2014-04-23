@@ -64,13 +64,16 @@ function UpdateTransitioning(playing : boolean) {
 		desiredPosition = new Vector3(0, -0.3, -9.3); //backed away from the island
 	} else {
 		rotationTarget = islandsAnchor.position;
-		desiredPosition = new Vector3(0, 40, -15); //above and to the side of the islands.
+		desiredPosition = new Vector3(0, 40, -30); //above and to the side of the islands.
 	}
 
+	var oldRotation = transform.rotation;
 	transform.LookAt(rotationTarget);
+	transform.rotation = Quaternion.Lerp(oldRotation, transform.rotation, 0.5);
 	transform.localPosition = Vector3.Lerp(transform.localPosition, desiredPosition, 0.2);
 
 	if (Vector3.Distance(transform.localPosition, desiredPosition) < 0.1) {
+		transform.LookAt(rotationTarget);
 		transitioning = false;
 
 		if (playing) {
@@ -85,25 +88,28 @@ function resetNudgePositions() {
 	defaultPosition = transform.position;
 	var target  = GameController.activeIsland.transform.position;
 
-	transform.RotateAround(target, Vector3.right, nudgeDistance);
+	var rightAxis = GameController.activeIsland.transform.right;
+	var upAxis = GameController.activeIsland.transform.up;
+
+	transform.RotateAround(target, rightAxis, nudgeDistance);
 	upRotation = transform.rotation;
 	upPosition = transform.position;
 
-	transform.RotateAround(target, Vector3.right, -2 * nudgeDistance);
+	transform.RotateAround(target, rightAxis, -2 * nudgeDistance);
 	downRotation = transform.rotation;
 	downPosition = transform.position;
 
-	transform.RotateAround(target, Vector3.right, nudgeDistance);
+	transform.RotateAround(target, rightAxis, nudgeDistance);
 
-	transform.RotateAround(target, Vector3.up, nudgeDistance);
+	transform.RotateAround(target, upAxis, nudgeDistance);
 	leftRotation = transform.rotation;
 	leftPosition = transform.position;
 
-	transform.RotateAround(target, Vector3.up, -2 * nudgeDistance);
+	transform.RotateAround(target,upAxis, -2 * nudgeDistance);
 	rightRotation = transform.rotation;
 	rightPosition = transform.position;
 
-	transform.RotateAround(target, Vector3.up, nudgeDistance);
+	transform.RotateAround(target, upAxis, nudgeDistance);
 
 	desiredRotation = defaultRotation;
 	desiredPosition = defaultPosition;
