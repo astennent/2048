@@ -3,6 +3,7 @@
 private var scoreBoard : ScoreBoard;
 
 var boards = new List.<Board>();
+var canRessurect = true;
 
 function registerBoard(board : Board) {
 	boards.Add(board);
@@ -30,8 +31,10 @@ function onMove(direction : int) {
 	}
 }
 
-function resetTiles() {
+function resetIsland() {
 	for (var board in boards) {
+		board.resetSpawnTileValue();
 		board.resetTiles();
 	}
+
 }

@@ -8,7 +8,7 @@
 	
 	function OnGUI() {
 		if (GameController.activeIsland != null) {
-			if (GUI.Button(new Rect(0, 0, 50, 20), "To Main")) {
+			if (GUI.Button(new Rect(0, 0, 70, 40), "To Main")) {
 				gameController.setIsland(null);
 			}
 		} else {

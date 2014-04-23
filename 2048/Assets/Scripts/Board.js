@@ -18,7 +18,6 @@ class Board extends MonoBehaviour {
 	private var boardWon = false;
 	private var boardLost = false;
 
-	var canReset = true;
 	private var maxTurnsToReset = 5;
 	private var turnsToReset = 0;
 
@@ -28,8 +27,6 @@ class Board extends MonoBehaviour {
 
 	function Start () {
 		board = new Tile[boardSize, boardSize];
-		generateTile();
-		generateTile();
 		island.registerBoard(this);
 	}
 
@@ -47,6 +44,7 @@ class Board extends MonoBehaviour {
 		board = new Tile[boardSize, boardSize];
 		generateTile();
 		generateTile();
+		turnsToReset = 0;
 	}
 
 	function isWon() {
@@ -271,12 +269,16 @@ class Board extends MonoBehaviour {
 
 	//Reduces the number of turns remaining before the board can ressurect by 1.
 	function decrementResetCounter() {
-		if (canReset && turnsToReset > 0) {
+		if (island.canRessurect && turnsToReset > 0) {
 			turnsToReset-=1;
 			if (turnsToReset == 0) {
 				ressurect();
 			}
 		} 
+	}
+
+	function resetSpawnTileValue() {
+		spawnTileValue = 2;
 	}
 
 	function ressurect() {

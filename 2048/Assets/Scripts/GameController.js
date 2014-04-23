@@ -29,7 +29,7 @@ class GameController extends MonoBehaviour {
 	function setIsland(island : Island) {
 		activeIsland = island;
 		if (island != null) {
-			activeIsland.resetTiles();
+			activeIsland.resetIsland();
 		}
 		ScoreController.invalidate();
 	}
