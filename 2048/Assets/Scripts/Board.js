@@ -18,12 +18,13 @@ class Board extends MonoBehaviour {
 	private var boardWon = false;
 	private var boardLost = false;
 
-	private var maxTurnsToReset = 5;
 	private var turnsToReset = 0;
 
 	var boardSize : int = 4;
 
 	private var spawnTileValue : int = 2;
+
+	var bracelet : Bracelet;
 
 	function Start () {
 		board = new Tile[boardSize, boardSize];
@@ -45,6 +46,10 @@ class Board extends MonoBehaviour {
 		generateTile();
 		generateTile();
 		turnsToReset = 0;
+
+		if (bracelet != null) {
+			bracelet.clearRings();
+		}
 	}
 
 	function isWon() {
@@ -252,25 +257,29 @@ class Board extends MonoBehaviour {
 			}
 		}
 
-		turnsToReset = maxTurnsToReset;
+		// The number of turns before the board resets increases with spawnTileValue
+		turnsToReset = spawnTileValue+1;
+
 		return true;
 	}
 
 	function handleBoardLost() {
-		//Turn everything to metal.
+		//Turn everything to metal and notes what the values are.
+		var values = new int[4];
 		for (var x = 0 ; x < board.GetLength(0) ; x++) {
 			for (var y = 0 ; y < board.GetLength(1) ; y++) {
-				if (board[x,y] != null) {
-					board[x,y].markFrozen();
-				}
+				board[x,y].markFrozen();
+				values[2*y+x] = board[x,y].value;
 			}
 		}
+		bracelet.spawnRings(turnsToReset, values);
 	}
 
 	//Reduces the number of turns remaining before the board can ressurect by 1.
 	function decrementResetCounter() {
 		if (island.canRessurect && turnsToReset > 0) {
 			turnsToReset-=1;
+			bracelet.removeRing();
 			if (turnsToReset == 0) {
 				ressurect();
 			}
