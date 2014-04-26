@@ -80,14 +80,14 @@ class Tile extends MonoBehaviour {
 	}
 
 	private function UpdateLiving() {
-		transform.localPosition = Vector3.Lerp(transform.localPosition, desiredPosition, 0.1);
+		transform.localPosition = Vector3.Lerp(transform.localPosition, desiredPosition, 0.25);
 		
-		if (Time.time - expandTime < .25) {
+		if (Time.time - expandTime < .2) {
 			var desiredScale = (markedFrozen) ? 1.3 : 1.2;
 			var scalingSpeed = .3;
 		} else {
 			desiredScale = 1.0;
-			scalingSpeed = .1;
+			scalingSpeed = .2;
 		}
 
 		transform.localScale = Vector3.Lerp(transform.localScale, desiredScale*Vector3.one, scalingSpeed);

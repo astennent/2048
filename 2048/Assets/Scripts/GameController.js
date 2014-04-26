@@ -26,15 +26,16 @@ class GameController extends MonoBehaviour {
 		setIsland(foursIsland);
 	}
 
-	function setIsland(island : Island) {
+	static function setIsland(island : Island) {
 		activeIsland = island;
-		if (island != null) {
-			activeIsland.resetIsland();
+
+		if (activeIsland != null && activeIsland.isGameOver()) {
+			activeIsland.restartIsland();
 		}
-		ScoreController.invalidate();
+ 
 	}
 
-	function onMove(direction : int) {
+	static function onMove(direction : int) {
 		if (activeIsland != null) { 
 			activeIsland.onMove(direction);
 		}

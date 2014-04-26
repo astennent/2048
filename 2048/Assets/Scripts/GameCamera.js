@@ -14,7 +14,7 @@ private var desiredRotation : Quaternion;
 private var desiredPosition : Vector3;
 
 private var nudgeTime : float;
-private var nudgeDistance : float = -10;
+private var nudgeDistance : float = -5;
 
 //Tracks the game state by observing the GameController's current island
 private var transitioning = true;

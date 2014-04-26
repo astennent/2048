@@ -10,8 +10,10 @@ function spawnRings(numRings : int, values : int[]) {
 	rings = new LinkedList.<BraceletRing>();
 	var ring_spacing = 0.2;
 	for (var i = 0 ; i < numRings ; i++) {
+
+		//Create the ring at the base location and let it move up.
 		var ring = GameObject.Instantiate(ringPrefab, transform.position, transform.rotation);
-		ring.transform.position.y += i*ring_spacing;
+		ring.setDesiredPosition(transform.position + Vector3.up*i*ring_spacing); 
 
 		var value = values[i%4];
 		ring.setValue(value);

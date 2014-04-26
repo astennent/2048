@@ -2,7 +2,7 @@
 
 static var activeScoreBoard : ScoreBoard;
 
-static function invalidate() {
+static function reset() {
 	var activeIsland = GameController.activeIsland;
 	if (activeIsland) {
 		activeScoreBoard = activeIsland.getScoreBoard();

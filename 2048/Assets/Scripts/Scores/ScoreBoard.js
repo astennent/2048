@@ -37,9 +37,16 @@ class ScoreBoard extends MonoBehaviour {
 	}
 
 	function Initialize() {
-		topScore = fetchTopScore();
 		currentScore = 0;
 		displayScore = 0;
+		refresh();
+	}
+
+	function refresh() {
+		//Refresh top score label. Current score is refreshed in Update
+		topScore = fetchTopScore();
+		topScoreLabel.text = ""+topScore;
+		topScoreLabel.color = ScoreController.getScoreColor(topScore);
 	}
 
 	function getCurrentScore() {
@@ -47,16 +54,14 @@ class ScoreBoard extends MonoBehaviour {
 	}
 
 	function fetchTopScore() {
-		//TODO: Retrieve from filesystem
-		return 0;
+		//Retrieve from filesystem
+		return PlayerPrefs.GetInt(GameController.activeIsland.islandId);
 	}
 
 	function setTopScore(numPoints : int) {
-		topScore = numPoints;
-		topScoreLabel.text = ""+topScore;
-		topScoreLabel.color = ScoreController.getScoreColor(topScore);
-
-		//TODO: Save in filesystem
+		//Save in filesystem
+		PlayerPrefs.SetInt(GameController.activeIsland.islandId, numPoints);
+		refresh();
 	}
 
 	function setScore(numPoints : int) {

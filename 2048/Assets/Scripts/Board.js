@@ -50,6 +50,9 @@ class Board extends MonoBehaviour {
 		if (bracelet != null) {
 			bracelet.clearRings();
 		}
+
+		boardWon = false;
+		boardLost = false;
 	}
 
 	function isWon() {
@@ -265,14 +268,17 @@ class Board extends MonoBehaviour {
 
 	function handleBoardLost() {
 		//Turn everything to metal and notes what the values are.
-		var values = new int[4];
+		var values = new int[board.GetLength(0) * board.GetLength(1)];
+		var valueIndex = 0;
 		for (var x = 0 ; x < board.GetLength(0) ; x++) {
 			for (var y = 0 ; y < board.GetLength(1) ; y++) {
 				board[x,y].markFrozen();
-				values[2*y+x] = board[x,y].value;
+				values[valueIndex++] = board[x,y].value;
 			}
 		}
-		bracelet.spawnRings(turnsToReset, values);
+		if (island.canRessurect) {
+			bracelet.spawnRings(turnsToReset, values);
+		}
 	}
 
 	//Reduces the number of turns remaining before the board can ressurect by 1.
