@@ -15,7 +15,7 @@ class Tile extends MonoBehaviour {
 
 	private var desiredPosition : Vector3;	
 
-	var value : int;
+	private var value : int;
 	var display_value : float;
 	var label : TextMesh;
 
@@ -101,6 +101,11 @@ class Tile extends MonoBehaviour {
 
 	function setValue(value : int) {
 		this.value = value;
+		markForExpansion();
+	}
+
+	function getValue() {
+		return value;
 	}
 
 	function markForReset() {

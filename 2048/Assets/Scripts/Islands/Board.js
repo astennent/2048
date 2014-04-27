@@ -192,13 +192,12 @@ class Board extends MonoBehaviour {
 			if (tiles[i] != null && tiles[i-1] != null && tiles[i].matches(tiles[i-1])) {
 				
 				//Record the change in score
-				var pointValue = tiles[i].value*2;
+				var pointValue = tiles[i].getValue()*2;
 				ScoreController.addPoints(pointValue);
 				mergedPointTotal += pointValue;
 				
 				//Notify the tiles of the changes
 				tiles[i].setValue(pointValue);
-				tiles[i].markForExpansion();
 				tiles[i-1].markForDeath(tiles[i]);
 				
 				//Update stored board
@@ -228,7 +227,7 @@ class Board extends MonoBehaviour {
 	private function checkForWin() {
 		for (var i = 0 ; i < boardSize ; i++) {
 			for (var j = 0 ; j < boardSize ; j++) {
-				if (board[i,j] != null && board[i,j].value == 2048) {
+				if (board[i,j] != null && board[i,j].getValue() == 2048) {
 					return true;
 				}
 			}
@@ -271,8 +270,10 @@ class Board extends MonoBehaviour {
 		var valueIndex = 0;
 		for (var x = 0 ; x < board.GetLength(0) ; x++) {
 			for (var y = 0 ; y < board.GetLength(1) ; y++) {
-				board[x,y].markFrozen();
-				values[valueIndex++] = board[x,y].value;
+				if (board[x,y] != null) {
+					board[x,y].markFrozen();
+					values[valueIndex++] = board[x,y].getValue();
+				}
 			}
 		}
 		if (island.canRessurect) {
@@ -293,6 +294,21 @@ class Board extends MonoBehaviour {
 
 	function resetSpawnTileValue() {
 		spawnTileValue = 2;
+	}
+
+	// Doubles the value of the base, updating all tiles that had less than the base and returning them as a list.
+	function doubleSpawnTileValue() {
+		var lowTiles = new List.<Tile>();
+		for (var x = 0 ; x < board.GetLength(0) ; x++) {
+			for (var y = 0 ; y < board.GetLength(1) ; y++) {
+				if (board[x,y] != null && board[x,y].getValue() == spawnTileValue) {
+					board[x,y].setValue(board[x,y].getValue() * 2);
+					lowTiles.Add(board[x,y]);
+				}
+			}
+		}
+		spawnTileValue *= 2;
+		return lowTiles;
 	}
 
 	function ressurect() {

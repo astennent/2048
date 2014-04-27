@@ -62,11 +62,8 @@ function onMove(direction : int) {
 		ScoreController.generateScoreBonus(mergedPointTotal);
 	}
 
-	//Notify frozen boards if the move was successful
 	if (madeMove) {
-		for (var board in boards) {
-			board.decrementResetCounter();
-		}
+		UpdateVariants();
 	}
 
 	//Check if the game is over
@@ -83,9 +80,23 @@ function onMove(direction : int) {
 	//TODO: Handle win?
 }
 
+function UpdateVariants() {
+	for (var board in boards) {
+		board.decrementResetCounter();
+	}
+
+	RingTimer.addTime();
+}
+
 function handleGameOver() {
 	pause();
-	print("Handling game over");
+}
+
+function handleTimedGameOver() {
+	for (var board in boards) {
+		board.handleBoardLost();
+	}
+	handleGameOver();
 }
 
 function restartIsland() {
@@ -96,4 +107,6 @@ function restartIsland() {
 	scoreBoard.reset();
 	gameOver = false;
 	paused = false;
+
+	RingTimer.notifyIslandReset(this);
 }

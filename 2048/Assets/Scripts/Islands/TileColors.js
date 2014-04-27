@@ -6,10 +6,10 @@ static var colors = [
 	new Color(.32, .68, .85),	//4
 	new Color(.75, .81, .27),	//8
 	new Color(.41, .73, .36),	//16
-	new Color(.73, .31, .36),	//32
+	new Color(.73, .31, .38),	//32
 	new Color(.65, .39, .62),	//64
-	new Color(.37, .39, .63),	//128
-	new Color(.53, .74, .81),	//256
+	new Color(.81, .40, .15),	//128
+	new Color(.37, .39, .63),	//256
 	new Color(.31, .47, .90),	//512
 	new Color(.61, .62, .90), 	//1024
 	new Color(1, 1, 1) 	//2048

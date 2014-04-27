@@ -6,6 +6,7 @@ class GameController extends MonoBehaviour {
 
 	var classicIsland : Island;
 	var foursIsland : Island;
+	var timedIsland : Island;
 	var gameCamera : GameCamera;
 
 	function Start() {
@@ -24,6 +25,10 @@ class GameController extends MonoBehaviour {
 
 	function playFours() {
 		setIsland(foursIsland);
+	}
+
+	function playTimed() {
+		setIsland(timedIsland);
 	}
 
 	static function setIsland(island : Island) {

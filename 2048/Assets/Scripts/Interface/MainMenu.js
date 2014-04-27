@@ -11,7 +11,6 @@
 			return;
 		} 
 		
-
 		var width = Screen.width*3.0/4.0;
 		var height = Screen.height*1.0/8.0;
 		var verticalPadding = Screen.height*1.2/8.0;
@@ -29,8 +28,8 @@
 		}
 
 		buttonRect.y += verticalPadding;
-		if (GUI.Button(buttonRect, "Other Game")) {
-
+		if (GUI.Button(buttonRect, "Timed")) {
+			gameController.playTimed();
 		}
 		
 	}
