@@ -48,11 +48,18 @@ function onMove(direction : int) {
 		return;
 	}
 
+	var mergedPointTotal = 0;
+
 	var madeMove = false;
 	for (var board in boards) {
 		if (board.onMove(direction)) {
 			madeMove = true;
+			mergedPointTotal += board.getMergedPointTotal();
 		}
+	}
+
+	if (mergedPointTotal != 0) {
+		ScoreController.generateScoreBonus(mergedPointTotal);
 	}
 
 	//Notify frozen boards if the move was successful
@@ -86,7 +93,7 @@ function restartIsland() {
 		board.resetSpawnTileValue();
 		board.resetTiles();
 	}
+	scoreBoard.reset();
 	gameOver = false;
 	paused = false;
-	ScoreController.reset();
 }

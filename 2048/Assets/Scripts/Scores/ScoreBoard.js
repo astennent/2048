@@ -36,13 +36,13 @@ class ScoreBoard extends MonoBehaviour {
 
 	}
 
-	function Initialize() {
+	function reset() {
 		currentScore = 0;
 		displayScore = 0;
-		refresh();
+		refreshTopScore();
 	}
 
-	function refresh() {
+	function refreshTopScore() {
 		//Refresh top score label. Current score is refreshed in Update
 		topScore = fetchTopScore();
 		topScoreLabel.text = ""+topScore;
@@ -61,7 +61,7 @@ class ScoreBoard extends MonoBehaviour {
 	function setTopScore(numPoints : int) {
 		//Save in filesystem
 		PlayerPrefs.SetInt(GameController.activeIsland.islandId, numPoints);
-		refresh();
+		refreshTopScore();
 	}
 
 	function setScore(numPoints : int) {
@@ -78,11 +78,6 @@ class ScoreBoard extends MonoBehaviour {
 	function generateScoreBonus(numPoints : int) {
 		var bonus = GameObject.Instantiate(scoreBonusPrefab, scoreLabel.transform.position, scoreLabel.transform.rotation);
 		bonus.init(numPoints);
-	}
-
-	function resetScore() {
-		currentScore = 0;
-		displayScore = 0;
 	}
 
 }

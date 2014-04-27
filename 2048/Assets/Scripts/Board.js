@@ -18,10 +18,10 @@ class Board extends MonoBehaviour {
 	private var boardWon = false;
 	private var boardLost = false;
 
-	private var turnsToReset = 0;
-
 	var boardSize : int = 4;
 
+	// Variants
+	private var turnsToReset = 0;
 	private var spawnTileValue : int = 2;
 
 	var bracelet : Bracelet;
@@ -61,6 +61,10 @@ class Board extends MonoBehaviour {
 
 	function isLost() {
 		return boardLost;
+	}
+
+	function getMergedPointTotal() {
+		return mergedPointTotal;
 	}
 
 	function generateTile() {
@@ -107,13 +111,8 @@ class Board extends MonoBehaviour {
 					default: break;
 				}
 			}
-
 			
 			shiftAndMergeRow(tempTiles, direction);
-		}
-
-		if (mergedPointTotal != 0) {
-			ScoreController.generateScoreBonus(mergedPointTotal);
 		}
 
 		if (boardChanged) {

@@ -1,29 +1,16 @@
 ﻿#pragma strict
 
-static var activeScoreBoard : ScoreBoard;
-
-static function reset() {
-	var activeIsland = GameController.activeIsland;
-	if (activeIsland) {
-		activeScoreBoard = activeIsland.getScoreBoard();
-		activeScoreBoard.Initialize();
-	} else {
-		activeScoreBoard = null;
-	}
-}
-
 static function addPoints(numPoints : int) {
-	activeScoreBoard.addPoints(numPoints);
+	GameController.activeIsland.getScoreBoard().addPoints(numPoints);
 }
 
 static function generateScoreBonus(mergedPointTotal : int) {
-	activeScoreBoard.generateScoreBonus(mergedPointTotal);
+	GameController.activeIsland.getScoreBoard().generateScoreBonus(mergedPointTotal);
 } 
 
 static function getCurrentScore() {
-	return activeScoreBoard.getCurrentScore();
+	return GameController.activeIsland.getScoreBoard().getCurrentScore();
 }
-
 
 static function getScoreColor(num : float) {
 	var adjustedNum = num * 2048.0 / 20480.0;

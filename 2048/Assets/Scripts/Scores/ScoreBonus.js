@@ -11,7 +11,7 @@ class ScoreBonus extends MonoBehaviour {
 		this.numPoints = numPoints;
 
 		var numSpaces = (ScoreController.getCurrentScore()+"").length;
-		transform.localPosition.x += .23 * numSpaces;
+		transform.localPosition += .23 * numSpaces * transform.right;
 		GetComponent(TextMesh).text = "+"+numPoints;
 		GetComponent(TextMesh).color = TileColors.getColor(numPoints);
 	}	
