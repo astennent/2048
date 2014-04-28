@@ -36,8 +36,7 @@ class GameController extends MonoBehaviour {
 
 		if (activeIsland != null && activeIsland.isGameOver()) {
 			activeIsland.restartIsland();
-		}
- 
+		} 
 	}
 
 	static function onMove(direction : int) {

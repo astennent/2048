@@ -12,6 +12,8 @@ private var rightRotation : Quaternion;
 private var rightPosition : Vector3;
 private var desiredRotation : Quaternion;
 private var desiredPosition : Vector3;
+private var pauseAdjustY : float = .5;
+private var pauseAdjustZ : float = -4;
 
 private var nudgeTime : float;
 private var nudgeDistance : float = -5;
@@ -45,9 +47,17 @@ function Update() {
 
 function UpdateNormal(playing : boolean) {
 	if (playing) {
-		if (Time.time - nudgeTime > .2) {
+
+		if (GameController.activeIsland.isPaused() || Time.time - nudgeTime > .2) {
 			desiredRotation = defaultRotation;
 			desiredPosition = defaultPosition;
+
+			// Adjust for pause menu if necessary
+			if (GameController.activeIsland.isPaused()) {
+				var pauseAdjust = transform.forward * pauseAdjustZ + transform.up * pauseAdjustY;
+				desiredPosition += pauseAdjust;
+			}
+
 		}
 
 		transform.rotation = Quaternion.Lerp(transform.rotation, desiredRotation, 0.3);
@@ -62,6 +72,13 @@ function UpdateTransitioning(playing : boolean) {
 	if (playing) {
 		var rotationTarget = GameController.activeIsland.transform.position;
 		desiredPosition = new Vector3(0, -0.3, -9.3); //backed away from the island
+
+		//Adjust for pause menu if necessary
+		if (GameController.activeIsland.isPaused()) {
+			var pauseAdjust = Vector3.forward * pauseAdjustZ + Vector3.up * pauseAdjustY;
+			desiredPosition += pauseAdjust;
+		}
+
 	} else {
 		rotationTarget = islandsAnchor.position;
 		desiredPosition = new Vector3(0, 40, -30); //above and to the side of the islands.
@@ -77,7 +94,14 @@ function UpdateTransitioning(playing : boolean) {
 		transitioning = false;
 
 		if (playing) {
-			resetNudgePositions();
+			if (GameController.activeIsland.isPaused()) {
+				//reuse the pauseAdjust variable calculated above
+				transform.localPosition -= pauseAdjust;
+				resetNudgePositions();
+				transform.localPosition += pauseAdjust;
+			} else {
+				resetNudgePositions();
+			}
 		}
 
 	}
@@ -113,6 +137,7 @@ function resetNudgePositions() {
 
 	desiredRotation = defaultRotation;
 	desiredPosition = defaultPosition;
+
 }
 
 function nudge(direction : int) {

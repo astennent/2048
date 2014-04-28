@@ -36,6 +36,8 @@ class Tile extends MonoBehaviour {
 			setValue(highValue);
 		}
 
+		display_value = Mathf.Min(2, value);
+
 		//Randomly adjust the texture
 		var offset = new Vector2(Random.Range(0,1.0),Random.Range(0, 0.8));
 		renderer.material.SetTextureOffset ("_MainTex", offset);

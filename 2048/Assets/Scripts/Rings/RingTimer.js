@@ -81,14 +81,14 @@ static function increaseBase() {
 	
 	//Create sparks to the rings
 	for (var ring : Transform in s_instance.transform) {
-		s_lightningRod.generateSpark(ring);
+		s_lightningRod.generateSpark(ring, 0.3);
 	}
 
 	//Increase the base value of the board
 	var lowTiles = s_timedIsland.boards[0].doubleSpawnTileValue();
 
 	for (var tile : Tile in lowTiles) {
-		s_lightningRod.generateSpark(s_timedIsland.transform, tile.transform);
+		s_lightningRod.generateSpark(tile.transform, 0.6);
 	}
 
 	//switch animation to resetting
@@ -97,9 +97,7 @@ static function increaseBase() {
 	timeIncrement = Mathf.Max(0.1, timeIncrement-timeIncrementDecay);
 }
 
-static function notifyIslandReset(island : Island) {
-	if (island == s_timedIsland) {
-		timeRemaining = startTime;
-		timeIncrement = initialTimeIncrement;
-	}
+static function handleIslandReset() {
+	timeRemaining = startTime;
+	timeIncrement = initialTimeIncrement;
 }

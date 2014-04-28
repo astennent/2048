@@ -4,6 +4,7 @@ private var scoreBoard : ScoreBoard;
 
 var boards = new List.<Board>();
 var canRessurect = true;
+var timed = false;
 private var paused : boolean;
 private var gameOver : boolean = true; //Game Over
 var islandId : String;
@@ -85,7 +86,9 @@ function UpdateVariants() {
 		board.decrementResetCounter();
 	}
 
-	RingTimer.addTime();
+	if (timed) {
+		RingTimer.addTime();
+	}
 }
 
 function handleGameOver() {
@@ -108,5 +111,7 @@ function restartIsland() {
 	gameOver = false;
 	paused = false;
 
-	RingTimer.notifyIslandReset(this);
+	if (timed) {
+		RingTimer.handleIslandReset();
+	}
 }
