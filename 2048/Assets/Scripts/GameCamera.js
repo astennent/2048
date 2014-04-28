@@ -24,19 +24,30 @@ private var prevIsland : Island;
 
 // Camera points at this when it is spinning
 var islandsAnchor : Transform;
+var menuStartPosition : Vector3;
+var gameController : GameController;
+
+function Start() {
+	prevIsland = gameController.classicIsland;
+}
 
 function Update() {
 
 	// Check if a transition must be made.
-	if (GameController.activeIsland != prevIsland) {
-		prevIsland = GameController.activeIsland;
+	var curIsland = GameController.activeIsland;
+
+	if (curIsland != prevIsland) {
 		transitioning = true;
-		if (prevIsland != null) {
-			transform.parent = prevIsland.transform;
+		if (curIsland == null) {
+			transform.parent = null;
+			menuStartPosition = new Vector3(-2*prevIsland.transform.position.x, 30, -2*prevIsland.transform.position.z);
+		} else {
+			transform.parent = curIsland.transform;
 		}
+		prevIsland = curIsland;
 	}
 
-	var playing = (GameController.activeIsland != null);
+	var playing = (curIsland != null);
 
 	if (transitioning) {
 		UpdateTransitioning(playing);
@@ -81,13 +92,14 @@ function UpdateTransitioning(playing : boolean) {
 
 	} else {
 		rotationTarget = islandsAnchor.position;
-		desiredPosition = new Vector3(0, 40, -30); //above and to the side of the islands.
+		desiredPosition = menuStartPosition;//new Vector3(0, 40, -30); //above and to the side of the islands.
 	}
 
 	var oldRotation = transform.rotation;
+
+	transform.localPosition = Vector3.Lerp(transform.localPosition, desiredPosition, 0.16);
 	transform.LookAt(rotationTarget);
 	transform.rotation = Quaternion.Lerp(oldRotation, transform.rotation, 0.5);
-	transform.localPosition = Vector3.Lerp(transform.localPosition, desiredPosition, 0.2);
 
 	if (Vector3.Distance(transform.localPosition, desiredPosition) < 0.1) {
 		transform.LookAt(rotationTarget);
