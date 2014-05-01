@@ -15,7 +15,6 @@ class Board extends MonoBehaviour {
 	static var LEFT = 2;
 	static var RIGHT = 3;
 
-	private var boardWon = false;
 	private var boardLost = false;
 
 	var boardSize : int = 4;
@@ -51,12 +50,7 @@ class Board extends MonoBehaviour {
 			bracelet.clearRings();
 		}
 
-		boardWon = false;
 		boardLost = false;
-	}
-
-	function isWon() {
-		return boardWon;
 	}
 
 	function isLost() {
@@ -217,22 +211,10 @@ class Board extends MonoBehaviour {
 	}
 
 	function UpdateBoardStatus() {
-		boardWon = checkForWin();
 		boardLost = checkForLoss();
 		if (boardLost) {
 			handleBoardLost();
 		}
-	}
-
-	private function checkForWin() {
-		for (var i = 0 ; i < boardSize ; i++) {
-			for (var j = 0 ; j < boardSize ; j++) {
-				if (board[i,j] != null && board[i,j].getValue() == 2048) {
-					return true;
-				}
-			}
-		}
-		return false;
 	}
 
 	private function checkForLoss() {
@@ -319,5 +301,19 @@ class Board extends MonoBehaviour {
 	function getSpawnTileValue() {
 		return spawnTileValue;
 	}
+
+
+	/****** ACHIEVEMENTS ******/
+	function checkFor2048() {
+		for (var i = 0 ; i < boardSize ; i++) {
+			for (var j = 0 ; j < boardSize ; j++) {
+				if (board[i,j] != null && board[i,j].getValue() == 2048) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
 
 }

@@ -1,9 +1,12 @@
 ﻿class MainMenu extends MonoBehaviour {
 
 	private var gameController : GameController;
+	private var gameCamera : GameCamera;
+	var showingAchievements = false;
 
 	function Start() {
 		gameController = GetComponent(GameController);
+		gameCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent(GameCamera);
 	}
 	
 	function OnGUI() {
@@ -18,20 +21,39 @@
 		var x = Screen.width*1.0/8.0;
 
 		var buttonRect = new Rect(x, y, width, height);
-		if (GUI.Button(buttonRect, "Classic")) {
-			gameController.playClassic();
-		}
 
-		buttonRect.y += verticalPadding;
-		if (GUI.Button(buttonRect, "Fours")) {
-			gameController.playFours();
-		}
+		if (!showingAchievements) {
 
-		buttonRect.y += verticalPadding;
-		if (GUI.Button(buttonRect, "Timed")) {
-			gameController.playTimed();
+			if (GUI.Button(buttonRect, "Classic")) {
+				gameController.playClassic();
+			}
+
+			buttonRect.y += verticalPadding;
+			if (GUI.Button(buttonRect, "Fours")) {
+				gameController.playFours();
+			}
+
+			buttonRect.y += verticalPadding;
+			if (GUI.Button(buttonRect, "Timed")) {
+				gameController.playTimed();
+			}
+
+			buttonRect.y += verticalPadding;
+			if (GUI.Button(buttonRect, "Achievements")) {
+				toggleAchievements();
+			}
+		} else {
+			buttonRect.y = Screen.height - verticalPadding/2 - height;
+			if (GUI.Button(buttonRect, "Back")) {
+				toggleAchievements();
+			}						
 		}
 		
+	}
+
+	function toggleAchievements() {
+		showingAchievements = !showingAchievements;
+		gameCamera.invalidate();
 	}
 
 }

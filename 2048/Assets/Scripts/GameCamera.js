@@ -24,11 +24,14 @@ private var prevIsland : Island;
 
 // Camera points at this when it is spinning
 var islandsAnchor : Transform;
+
 var menuStartPosition : Vector3;
 var gameController : GameController;
+private var mainMenu : MainMenu;
 
 function Start() {
 	prevIsland = gameController.classicIsland;
+	mainMenu = gameController.GetComponent(MainMenu);
 }
 
 function Update() {
@@ -49,11 +52,18 @@ function Update() {
 
 	var playing = (curIsland != null);
 
-	if (transitioning) {
+	UpdateAnchorPosition(curIsland);
+	if (mainMenu.showingAchievements) {
+		UpdateForAchievementMenu();
+	} else if (transitioning) {
 		UpdateTransitioning(playing);
 	} else {
 		UpdateNormal(playing);
 	}
+}
+
+function invalidate() {
+	transitioning = true;
 }
 
 function UpdateNormal(playing : boolean) {
@@ -95,11 +105,8 @@ function UpdateTransitioning(playing : boolean) {
 		desiredPosition = menuStartPosition;//new Vector3(0, 40, -30); //above and to the side of the islands.
 	}
 
-	var oldRotation = transform.rotation;
-
-	transform.localPosition = Vector3.Lerp(transform.localPosition, desiredPosition, 0.16);
+	transform.localPosition = Vector3.Lerp(transform.localPosition, desiredPosition, 0.2);
 	transform.LookAt(rotationTarget);
-	transform.rotation = Quaternion.Lerp(oldRotation, transform.rotation, 0.5);
 
 	if (Vector3.Distance(transform.localPosition, desiredPosition) < 0.1) {
 		transform.LookAt(rotationTarget);
@@ -117,6 +124,27 @@ function UpdateTransitioning(playing : boolean) {
 		}
 
 	}
+}
+
+function UpdateForAchievementMenu() {
+	var anchor = GameObject.FindGameObjectWithTag("CameraAnchor");
+	desiredPosition = anchor.transform.position / 2;
+	transform.localPosition = Vector3.Lerp(transform.localPosition, desiredPosition, 0.1);
+
+	var oldRotation = transform.rotation;
+	transform.LookAt(anchor.transform, GameObject.FindGameObjectWithTag("HighscoreBoard").transform.up);
+	transform.rotation = Quaternion.Lerp(oldRotation, transform.rotation, 0.15);
+}
+
+function UpdateAnchorPosition(curIsland : Island) {
+	var anchor = GameObject.FindGameObjectWithTag("CameraAnchor");
+	var anchorDesiredPosition : Vector3;
+	if (curIsland != null) {
+		anchorDesiredPosition = curIsland.transform.position;
+	} else {
+		anchorDesiredPosition = (mainMenu.showingAchievements) ? Vector3.up * -15 : Vector3.zero;
+	}
+	anchor.transform.position = Vector3.Lerp(anchor.transform.position, anchorDesiredPosition, 0.17);
 }
 
 function resetNudgePositions() {

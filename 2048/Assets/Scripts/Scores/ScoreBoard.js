@@ -61,6 +61,7 @@ class ScoreBoard extends MonoBehaviour {
 	function setTopScore(numPoints : int) {
 		//Save in filesystem
 		PlayerPrefs.SetInt(GameController.activeIsland.islandId, numPoints);
+		HighscoreBoard.invalidate();
 		refreshTopScore();
 	}
 

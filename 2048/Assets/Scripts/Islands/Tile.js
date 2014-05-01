@@ -152,15 +152,9 @@ class Tile extends MonoBehaviour {
 		desiredPosition = transformPosition(coordinate.x, coordinate.y);
 	}
 
-	private function transformPosition(x : int, y : int) {
-		// var x_coordinate = 1.2*x - 1.8;
-		// var y_coordinate = 1.2*y - 1.8;
-
+	private function transformPosition(x : int, y : int) {		
 		var x_coordinate = board.transform.localPosition.x + 1.2*x -(.075*board.boardSize+.15)*board.boardSize;
 		var y_coordinate = board.transform.localPosition.y + 1.2*y -(.075*board.boardSize+.15)*board.boardSize;
-
-		// var x_coordinate = board.transform.localPosition.x + (0.3*x - 0.45)*board.boardSize;
-		// var y_coordinate = board.transform.localPosition.y + (0.3*y - 0.45)*board.boardSize;
 		return new Vector3(x_coordinate, y_coordinate, 0);
 	}
 

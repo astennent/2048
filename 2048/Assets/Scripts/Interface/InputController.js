@@ -2,6 +2,7 @@
 
 static var deltaPosition = Vector2.zero;
 static var inputFrozen = false;
+static var sensitivity = 10;
 
 static function getInputDirection() {
 	if(Input.GetKeyDown(KeyCode.UpArrow)) {
@@ -26,7 +27,7 @@ static function getInputDirection() {
 		var touch = Input.GetTouch(0);
 
 		deltaPosition += touch.deltaPosition;
- 		if (deltaPosition.sqrMagnitude > 150) {
+ 		if (deltaPosition.x > sensitivity || deltaPosition.x < -sensitivity || deltaPosition.y > sensitivity || deltaPosition.y < -sensitivity) {
  			return extractDirection();
  		}
 		

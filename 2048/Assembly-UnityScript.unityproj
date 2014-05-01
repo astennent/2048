@@ -58,9 +58,11 @@
      <Compile Include="Assets\Scripts\Islands\Island.js" />
      <Compile Include="Assets\Scripts\Islands\Tile.js" />
      <Compile Include="Assets\Scripts\Islands\TileColors.js" />
+     <Compile Include="Assets\Scripts\Ocean.js" />
      <Compile Include="Assets\Scripts\Rings\Bracelet.js" />
      <Compile Include="Assets\Scripts\Rings\BraceletRing.js" />
      <Compile Include="Assets\Scripts\Rings\RingTimer.js" />
+     <Compile Include="Assets\Scripts\Scores\HighscoreBoard.js" />
      <Compile Include="Assets\Scripts\Scores\ScoreBoard.js" />
      <Compile Include="Assets\Scripts\Scores\ScoreBonus.js" />
      <Compile Include="Assets\Scripts\Scores\ScoreController.js" />
