@@ -133,7 +133,7 @@ function UpdateForAchievementMenu() {
 
 	var oldRotation = transform.rotation;
 	transform.LookAt(anchor.transform, GameObject.FindGameObjectWithTag("HighscoreBoard").transform.up);
-	transform.rotation = Quaternion.Lerp(oldRotation, transform.rotation, 0.15);
+	transform.rotation = Quaternion.Lerp(oldRotation, transform.rotation, 0.2);
 }
 
 function UpdateAnchorPosition(curIsland : Island) {

@@ -2,25 +2,42 @@
 
 	private var gameController : GameController;
 	private var gameCamera : GameCamera;
+
+	static var originalWidth : float = 480;
+	static var originalHeight : float = 800;
+
 	var showingAchievements = false;
+
+	var menuFont : Font;
 
 	function Start() {
 		gameController = GetComponent(GameController);
 		gameCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent(GameCamera);
 	}
+
+	static function getGUIScale() {
+		var scale = new Vector3(Screen.width/originalWidth, Screen.height/originalHeight, 1);
+		return Matrix4x4.TRS(Vector3.zero, Quaternion.identity, scale);
+	}
 	
 	function OnGUI() {
+
+		GUI.skin.font = menuFont;
+
 		if (GameController.activeIsland != null) {
 			return;
 		} 
 		
-		var width = Screen.width*3.0/4.0;
-		var height = Screen.height*1.0/8.0;
-		var verticalPadding = Screen.height*1.2/8.0;
-		var y = Screen.height*1.0/3.0;
-		var x = Screen.width*1.0/8.0;
+		var width = 400;
+		var height = 100;
+		var verticalPadding = 20 + height;
+		var y = 200;
+		var x = 40;
 
 		var buttonRect = new Rect(x, y, width, height);
+
+		var svMat = GUI.matrix; // save current matrix
+		GUI.matrix = getGUIScale();
 
 		if (!showingAchievements) {
 
@@ -43,11 +60,13 @@
 				toggleAchievements();
 			}
 		} else {
-			buttonRect.y = Screen.height - verticalPadding/2 - height;
+			buttonRect.y = 620;
 			if (GUI.Button(buttonRect, "Back")) {
 				toggleAchievements();
 			}						
 		}
+
+		GUI.matrix = svMat;
 		
 	}
 

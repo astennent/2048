@@ -4,31 +4,38 @@ class PauseMenu extends MonoBehaviour {
 	private var gameController : GameController;
 	private var lastUnpauseTime : float;
 
+	var menuFont : Font;
+
 	function Start() {
 		gameController = GetComponent(GameController);
 	}
 
 	function OnGUI() {
+		GUI.skin.font = menuFont;
+
+		var svMat = GUI.matrix; // save current matrix
+		GUI.matrix = MainMenu.getGUIScale();
+
 		//Just draw the pause button
 		var activeIsland = gameController.activeIsland;
 		if (activeIsland == null) {
 			return;
 		}
 		
-		DrawPauseButton();
 		if (activeIsland.isPaused()) {
 			DrawMenu();
 		} else {
+			DrawPauseButton();
 			lastUnpauseTime = Time.time;
 		}
+
+		GUI.matrix = svMat;
 
 	}
 
 	function DrawPauseButton() {
-		var width = Screen.width/10.0;
-		var padding = Screen.width/15.0;
-		var pauseRect = new Rect(Screen.width-width-padding, padding, width, width);
-		if (GUI.Button(pauseRect, "P")) {
+		var pauseRect = new Rect(140, 620, 200, 80);
+		if (GUI.Button(pauseRect, "Pause")) {
 			gameController.activeIsland.togglePause();
 		}
 	}
@@ -37,15 +44,18 @@ class PauseMenu extends MonoBehaviour {
 
 		var transparency = Mathf.Min(0.5, Time.time - lastUnpauseTime); //fade in
 		GUI.color = new Color(1, 1, 1, transparency);
-		GUI.Box(new Rect(0, 0, Screen.width, Screen.height), "");
+		GUI.Box(new Rect(0, 0, 480, 800), "");
+		GUI.Box(new Rect(0, 0, 480, 800), "");
+		GUI.Box(new Rect(0, 0, 480, 800), "");
+
 		GUI.color = Color.white;
 
-		var buttonWidth = Screen.width * 0.8;
-		var buttonHeight = buttonWidth * 0.3;
-		var buttonPadding = buttonHeight * 0.2;
-		var buttonY = (Screen.height - 3*buttonHeight - 2*buttonPadding)/2;
+		var buttonWidth = 400;
+		var buttonHeight = 100;
+		var buttonPadding = 20;
+		var buttonY = 200;
 
-		var buttonRect = new Rect( (Screen.width - buttonWidth)/2, buttonY, buttonWidth, buttonHeight);
+		var buttonRect = new Rect(40, buttonY, buttonWidth, buttonHeight);
 
 		if (GUI.Button(buttonRect, "Resume")) {
 			print("Resuming");
