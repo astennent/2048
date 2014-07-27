@@ -42,10 +42,10 @@ class PauseMenu extends MonoBehaviour {
 
 	function DrawMenu() {
 
-		var transparency = Mathf.Min(0.5, Time.time - lastUnpauseTime); //fade in
+		var transparency = (gameController.activeIsland.isGameOver()) 
+				? 1.0 
+				: Mathf.Min(1.0, Time.time - lastUnpauseTime); //fade in
 		GUI.color = new Color(1, 1, 1, transparency);
-		GUI.Box(new Rect(0, 0, 480, 800), "");
-		GUI.Box(new Rect(0, 0, 480, 800), "");
 		GUI.Box(new Rect(0, 0, 480, 800), "");
 
 		GUI.color = Color.white;
@@ -57,8 +57,7 @@ class PauseMenu extends MonoBehaviour {
 
 		var buttonRect = new Rect(40, buttonY, buttonWidth, buttonHeight);
 
-		if (GUI.Button(buttonRect, "Resume")) {
-			print("Resuming");
+		if (!gameController.activeIsland.isGameOver() && GUI.Button(buttonRect, "Resume")) {
 			gameController.activeIsland.unpause();
 		}
 

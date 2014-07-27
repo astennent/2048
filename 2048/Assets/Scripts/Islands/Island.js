@@ -9,6 +9,10 @@ private var paused : boolean;
 private var gameOver : boolean = true; //Game Over
 var islandId : String;
 
+// Used to add a pause after game over so the player can see what happened.
+private var gameOverTime : float = 0.0;
+private var delayingGameOver = false;
+
 function isPaused() {
 	return paused;
 }
@@ -42,10 +46,11 @@ function getScoreBoard() {
 	return scoreBoard;
 }
 
+
 function onMove(direction : int) {
 
 	//Don't respond to input if paused
-	if (paused) {
+	if (paused || gameOver) {
 		return;
 	}
 
@@ -92,14 +97,31 @@ function UpdateVariants() {
 }
 
 function handleGameOver() {
-	pause();
+	gameOver = true;
+	if (!delayingGameOver) {
+		gameOverTime = Time.time;
+		delayingGameOver = true;
+		for (var board in boards) {
+			board.handleBoardLost();
+		}
+	}
+
+}
+function Update() {
+	if (delayingGameOver && gameOver && Time.time - gameOverTime > 1.0) {
+		delayingGameOver = false;
+		pause();
+	}	
 }
 
-function handleTimedGameOver() {
-	for (var board in boards) {
-		board.handleBoardLost();
+function OnGUI() {
+	if (delayingGameOver) {
+		var screenCoveringRect = new Rect(0, 0, 480, 800);
+		var oldAlpha = GUI.color.a;
+		GUI.color.a = Mathf.Min(1.0, Time.time - gameOverTime);
+		GUI.Box(screenCoveringRect, "");
+		GUI.color.a = oldAlpha;
 	}
-	handleGameOver();
 }
 
 function restartIsland() {

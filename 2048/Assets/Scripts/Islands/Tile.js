@@ -8,7 +8,6 @@ class Tile extends MonoBehaviour {
 	private var markedForDeath = false;
 	private var markedFrozen = false;
 	private var deathTime : float;
-	private var frozenTime : float;
 	private var expandTime : float = -1;
 
 	private var board : Board;
@@ -47,8 +46,7 @@ class Tile extends MonoBehaviour {
 		transform.localPosition = desiredPosition;
 	}
 
-	function Update() {
-		
+	function Update() {		
 		if (display_value > 0) {
 			label.text = ""+parseInt(display_value);
 		} else {
@@ -85,11 +83,11 @@ class Tile extends MonoBehaviour {
 		transform.localPosition = Vector3.Lerp(transform.localPosition, desiredPosition, 0.25);
 		
 		if (Time.time - expandTime < .2) {
-			var desiredScale = (markedFrozen) ? 1.3 : 1.2;
-			var scalingSpeed = .3;
+			var desiredScale =  1.2;
+			var scalingSpeed = (markedFrozen) ? 0.1 : 0.3;
 		} else {
 			desiredScale = 1.0;
-			scalingSpeed = .2;
+			scalingSpeed = (markedFrozen) ? 0.1 : 0.2;
 		}
 
 		transform.localScale = Vector3.Lerp(transform.localScale, desiredScale*Vector3.one, scalingSpeed);

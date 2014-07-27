@@ -47,7 +47,7 @@ function Update () {
 		}
 
 		if (timeRemaining <= 0) {
-			timedIsland.handleTimedGameOver();
+			timedIsland.handleGameOver();
 		}
 	}
 }
