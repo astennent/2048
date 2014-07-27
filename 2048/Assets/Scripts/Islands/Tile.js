@@ -66,7 +66,7 @@ class Tile extends MonoBehaviour {
 
 	private function UpdateDying() {
 		if (absorbingTile != null) {
-			transform.localPosition = Vector3.Lerp(transform.localPosition, absorbingTile.transform.localPosition, 0.2);
+			transform.localPosition = Vector3.Lerp(transform.localPosition, absorbingTile.transform.localPosition, 0.35);
 		} 
 		if (absorbingTile == null || Vector3.Distance(transform.localPosition, absorbingTile.transform.localPosition) < .5) {
 			transform.localScale = Vector3.Lerp(transform.localScale, Vector3.zero, 0.1);
@@ -80,7 +80,7 @@ class Tile extends MonoBehaviour {
 	}
 
 	private function UpdateLiving() {
-		transform.localPosition = Vector3.Lerp(transform.localPosition, desiredPosition, 0.25);
+		transform.localPosition = Vector3.Lerp(transform.localPosition, desiredPosition, 0.4);
 		
 		if (Time.time - expandTime < .2) {
 			var desiredScale =  1.2;

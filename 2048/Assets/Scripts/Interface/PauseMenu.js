@@ -4,10 +4,16 @@ class PauseMenu extends MonoBehaviour {
 	private var gameController : GameController;
 	private var lastUnpauseTime : float;
 
+	private var escapeTime = 0.0;
+
 	var menuFont : Font;
 
 	function Start() {
 		gameController = GetComponent(GameController);
+	}
+
+	function canPressEscape() {
+		return Time.time - escapeTime > 0.2;
 	}
 
 	function OnGUI() {
@@ -35,7 +41,8 @@ class PauseMenu extends MonoBehaviour {
 
 	function DrawPauseButton() {
 		var pauseRect = new Rect(140, 620, 200, 80);
-		if (GUI.Button(pauseRect, "Pause")) {
+		if (GUI.Button(pauseRect, "Pause") || (canPressEscape() && Input.GetKeyDown(KeyCode.Escape))) {
+			escapeTime = Time.time;
 			gameController.activeIsland.togglePause();
 		}
 	}
@@ -70,7 +77,8 @@ class PauseMenu extends MonoBehaviour {
 
 		buttonRect.y += buttonHeight + buttonPadding;
 
-		if (GUI.Button(buttonRect, "Main")) {
+		if (GUI.Button(buttonRect, "Main") || (canPressEscape() && Input.GetKeyDown(KeyCode.Escape))) {
+			escapeTime = Time.time;
 			gameController.setIsland(null);
 		}
 	}

@@ -116,7 +116,7 @@ function Update() {
 
 function OnGUI() {
 	if (delayingGameOver) {
-		var screenCoveringRect = new Rect(0, 0, 480, 800);
+		var screenCoveringRect = new Rect(-1, -1, Screen.width+2, Screen.height+2);
 		var oldAlpha = GUI.color.a;
 		GUI.color.a = Mathf.Min(1.0, Time.time - gameOverTime);
 		GUI.Box(screenCoveringRect, "");

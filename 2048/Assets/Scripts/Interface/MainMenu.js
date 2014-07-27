@@ -61,7 +61,7 @@
 			}
 		} else {
 			buttonRect.y = 620;
-			if (GUI.Button(buttonRect, "Back")) {
+			if (GUI.Button(buttonRect, "Back") || Input.GetKeyDown(KeyCode.Escape)) {
 				toggleAchievements();
 			}						
 		}
